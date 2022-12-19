@@ -16,6 +16,7 @@ using RestSharp;
 using RestSharp.Authenticators;
 using AssetTracker.Properties;
 using System.Xml.Linq;
+using Application = System.Windows.Forms.Application;
 
 namespace AssetTracker
 {
@@ -108,59 +109,77 @@ namespace AssetTracker
 
         private void buttonPost_Click(object sender, EventArgs e)
         {
-            var createClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/Asset"){
-                Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
-            }; 
-            var createRequest = new RestRequest(Method.POST);
-            createRequest.AddParameter("modelName", "aaaTest");
-            createRequest.AddParameter("manufacturer", labelManufacturer.Text);
-            createRequest.AddParameter("type", comboBoxType.Text);
-            createRequest.AddParameter("supplier", "Purchased");
-            createRequest.AddParameter("serialNumber", labelSN.Text);
-            createRequest.AddParameter("location", labelLocation.Text);
-            createRequest.AddParameter("comments", labelName.Text);
-            createRequest.AddParameter("company", "Senneca");
-            IRestResponse createResponse = createClient.Execute(createRequest); 
-            var createResp = createResponse.Content;
-            var createJson = Newtonsoft.Json.Linq.JObject.Parse(createResp); 
-            var id = (int)createJson["id"];
+            if (comboBoxType.Text != "" && textBoxTicket.Text != "")
+            {
+                var createClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/Asset")
+                {
+                    Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+                };
+                var createRequest = new RestRequest(Method.POST);
+                createRequest.AddParameter("modelName", "aaaTest");
+                createRequest.AddParameter("manufacturer", labelManufacturer.Text);
+                createRequest.AddParameter("type", comboBoxType.Text);
+                createRequest.AddParameter("supplier", "Purchased");
+                createRequest.AddParameter("serialNumber", labelSN.Text);
+                createRequest.AddParameter("location", labelLocation.Text);
+                createRequest.AddParameter("comments", labelName.Text);
+                createRequest.AddParameter("company", "Senneca");
+                IRestResponse createResponse = createClient.Execute(createRequest);
+                var createResp = createResponse.Content;
+                var createJson = Newtonsoft.Json.Linq.JObject.Parse(createResp);
+                var id = (int)createJson["id"];
 
-            var ticketClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/AddAssetToTicket") {
-                Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
-            };
-            var ticketRequest = new RestRequest(Method.POST);
-            ticketRequest.AddParameter("assetId", id);
-            ticketRequest.AddParameter("ticketId", textBoxTicket.Text);
-            IRestResponse ticketResponse = ticketClient.Execute(ticketRequest);
+                var ticketClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/AddAssetToTicket")
+                {
+                    Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+                };
+                var ticketRequest = new RestRequest(Method.POST);
+                ticketRequest.AddParameter("assetId", id);
+                ticketRequest.AddParameter("ticketId", textBoxTicket.Text);
+                IRestResponse ticketResponse = ticketClient.Execute(ticketRequest);
 
-            var userClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/UserByEmail"){
-                Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
-            };
-            var userRequest = new RestRequest(Method.GET);
-            var email = "";
-            if (labelLocation.Text == "Salt Lake City"){
-                email = labelUsername.Text + "@subzeroeng.com";
-            }
-            if (labelLocation.Text == "Mankato") {
-                email = labelUsername.Text + "@doorengineering.com";
+                var userClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/UserByEmail")
+                {
+                    Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+                };
+                var userRequest = new RestRequest(Method.GET);
+                var email = "";
+                if (labelLocation.Text == "Salt Lake City")
+                {
+                    email = labelUsername.Text + "@subzeroeng.com";
+                }
+                if (labelLocation.Text == "Mankato")
+                {
+                    email = labelUsername.Text + "@doorengineering.com";
+                }
+                else
+                {
+                    email = labelUsername.Text + "@senneca.com";
+                }
+                userRequest.AddParameter("email", email);
+                IRestResponse userResponse = userClient.Execute(userRequest);
+                var userResp = userResponse.Content;
+                var userJson = Newtonsoft.Json.Linq.JObject.Parse(userResp);
+                var userId = (int)userJson["UserID"];
+
+                var assignClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/AssignAssetToUser")
+                {
+                    Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+                };
+                var assignRequest = new RestRequest(Method.POST);
+                assignRequest.AddParameter("assetId", id);
+                assignRequest.AddParameter("userId", userId);
+                IRestResponse assignResponse = assignClient.Execute(assignRequest);
+                var assignResp = assignResponse.Content;
+                DialogResult dialog = MessageBox.Show("Asset created with ID " + id);
+                if (dialog == DialogResult.OK)
+                {
+                    Application.Exit();
+                }
             }
             else{
-                email = labelUsername.Text + "@senneca.com";
+                MessageBox.Show("Please enter type and ticket number.");
             }
-            userRequest.AddParameter("email",  email);
-            IRestResponse userResponse = userClient.Execute(userRequest);
-            var userResp = userResponse.Content;
-            var userJson = Newtonsoft.Json.Linq.JObject.Parse(userResp);
-            var userId = (int)userJson["UserID"];
-
-            var assignClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/AssignAssetToUser"){
-                Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
-            };
-            var assignRequest = new RestRequest(Method.POST);
-            assignRequest.AddParameter("assetId", id);
-            assignRequest.AddParameter("userId", userId);
-            IRestResponse assignResponse = assignClient.Execute(assignRequest);
-            var assignResp = assignResponse.Content;
         }
     }
 }
