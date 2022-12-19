@@ -11,6 +11,10 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Management;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Reflection;
+using System.Threading;
+using RestSharp;
+using RestSharp.Authenticators;
+using AssetTracker.Properties;
 
 namespace AssetTracker
 {
@@ -33,7 +37,7 @@ namespace AssetTracker
                 {
                     var domainName = queryObj["UserName"].ToString();
                     var userName = domainName.Substring(domainName.LastIndexOf(@"\") + 1);
-                    labelUsername.Text = userName;  
+                    labelUsername.Text = userName;
                 }
 
                 ManagementObjectSearcher searcherModel =
@@ -42,7 +46,7 @@ namespace AssetTracker
                 foreach (ManagementObject queryObj in searcherModel.Get())
                 {
                     var model = queryObj["Model"].ToString();
-                    labelModel.Text = model;    
+                    labelModel.Text = model;
                 }
 
                 ManagementObjectSearcher searcherSN =
@@ -104,16 +108,28 @@ namespace AssetTracker
                         labelLocation.Text = "HMF Express";
                     }
                 }
-                labelType.Enabled=true;
-                comboBoxType.Enabled=true;  
-                labelTicket.Enabled=true;
-                textBoxTicket.Enabled=true;
-                buttonPost.Enabled=true;
+                labelType.Enabled = true;
+                comboBoxType.Enabled = true;
+                labelTicket.Enabled = true;
+                textBoxTicket.Enabled = true;
+                buttonPost.Enabled = true;
             }
-            catch (ManagementException )
+            catch (ManagementException)
             {
                 MessageBox.Show("An error occurred while querying for WMI data.");
             }
+        }
+
+        private void buttonPost_Click(object sender, EventArgs e)
+        {
+            var shipClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/Asset"){
+                Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+            }; 
+            var shipRequest = new RestRequest(Method.POST);
+            shipRequest.AddParameter("modelName", "aaaTest");
+            IRestResponse shipResponse = shipClient.Execute(shipRequest); 
+            var shipResp = shipResponse.Content;
+            MessageBox.Show(shipResp);
         }
     }
 }

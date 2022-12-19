@@ -210,6 +210,7 @@
             this.buttonPost.TabIndex = 18;
             this.buttonPost.Text = "Post to Jitbit";
             this.buttonPost.UseVisualStyleBackColor = true;
+            this.buttonPost.Click += new System.EventHandler(this.buttonPost_Click);
             // 
             // Form1
             // 
