@@ -30,32 +30,208 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.labelModel = new System.Windows.Forms.Label();
+            this.labelManufacturer = new System.Windows.Forms.Label();
+            this.labelSN = new System.Windows.Forms.Label();
+            this.labelName = new System.Windows.Forms.Label();
+            this.labelLocation = new System.Windows.Forms.Label();
+            this.labelUsername = new System.Windows.Forms.Label();
+            this.labelType = new System.Windows.Forms.Label();
+            this.comboBoxType = new System.Windows.Forms.ComboBox();
+            this.labelTicket = new System.Windows.Forms.Label();
+            this.textBoxTicket = new System.Windows.Forms.TextBox();
+            this.buttonPost = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(44, 44);
+            this.label1.Location = new System.Drawing.Point(23, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 20);
+            this.label1.Size = new System.Drawing.Size(56, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.label1.Text = "Model:";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(350, 351);
+            this.button1.Location = new System.Drawing.Point(321, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(170, 39);
             this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
+            this.button1.Text = "Fetch WMI Data";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(23, 78);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(108, 20);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Manufacturer:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(23, 136);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(113, 20);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Serial Number:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(23, 198);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 20);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Name:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(22, 257);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 20);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "Location:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(23, 315);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(87, 20);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Username:";
+            // 
+            // labelModel
+            // 
+            this.labelModel.AutoSize = true;
+            this.labelModel.Location = new System.Drawing.Point(85, 21);
+            this.labelModel.Name = "labelModel";
+            this.labelModel.Size = new System.Drawing.Size(0, 20);
+            this.labelModel.TabIndex = 7;
+            // 
+            // labelManufacturer
+            // 
+            this.labelManufacturer.AutoSize = true;
+            this.labelManufacturer.Location = new System.Drawing.Point(137, 78);
+            this.labelManufacturer.Name = "labelManufacturer";
+            this.labelManufacturer.Size = new System.Drawing.Size(0, 20);
+            this.labelManufacturer.TabIndex = 8;
+            // 
+            // labelSN
+            // 
+            this.labelSN.AutoSize = true;
+            this.labelSN.Location = new System.Drawing.Point(142, 136);
+            this.labelSN.Name = "labelSN";
+            this.labelSN.Size = new System.Drawing.Size(0, 20);
+            this.labelSN.TabIndex = 9;
+            // 
+            // labelName
+            // 
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(84, 198);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(0, 20);
+            this.labelName.TabIndex = 10;
+            // 
+            // labelLocation
+            // 
+            this.labelLocation.AutoSize = true;
+            this.labelLocation.Location = new System.Drawing.Point(103, 257);
+            this.labelLocation.Name = "labelLocation";
+            this.labelLocation.Size = new System.Drawing.Size(0, 20);
+            this.labelLocation.TabIndex = 11;
+            // 
+            // labelUsername
+            // 
+            this.labelUsername.AutoSize = true;
+            this.labelUsername.Location = new System.Drawing.Point(117, 314);
+            this.labelUsername.Name = "labelUsername";
+            this.labelUsername.Size = new System.Drawing.Size(0, 20);
+            this.labelUsername.TabIndex = 12;
+            // 
+            // labelType
+            // 
+            this.labelType.AutoSize = true;
+            this.labelType.Enabled = false;
+            this.labelType.Location = new System.Drawing.Point(317, 70);
+            this.labelType.Name = "labelType";
+            this.labelType.Size = new System.Drawing.Size(47, 20);
+            this.labelType.TabIndex = 14;
+            this.labelType.Text = "Type:";
+            // 
+            // comboBoxType
+            // 
+            this.comboBoxType.Enabled = false;
+            this.comboBoxType.FormattingEnabled = true;
+            this.comboBoxType.Items.AddRange(new object[] {
+            "Laptop",
+            "Desktop",
+            "Workstation"});
+            this.comboBoxType.Location = new System.Drawing.Point(370, 67);
+            this.comboBoxType.Name = "comboBoxType";
+            this.comboBoxType.Size = new System.Drawing.Size(121, 28);
+            this.comboBoxType.TabIndex = 15;
+            // 
+            // labelTicket
+            // 
+            this.labelTicket.AutoSize = true;
+            this.labelTicket.Enabled = false;
+            this.labelTicket.Location = new System.Drawing.Point(317, 117);
+            this.labelTicket.Name = "labelTicket";
+            this.labelTicket.Size = new System.Drawing.Size(70, 20);
+            this.labelTicket.TabIndex = 16;
+            this.labelTicket.Text = "TIcket #:";
+            // 
+            // textBoxTicket
+            // 
+            this.textBoxTicket.Enabled = false;
+            this.textBoxTicket.Location = new System.Drawing.Point(393, 114);
+            this.textBoxTicket.Name = "textBoxTicket";
+            this.textBoxTicket.Size = new System.Drawing.Size(98, 26);
+            this.textBoxTicket.TabIndex = 17;
+            // 
+            // buttonPost
+            // 
+            this.buttonPost.Enabled = false;
+            this.buttonPost.Location = new System.Drawing.Point(318, 161);
+            this.buttonPost.Name = "buttonPost";
+            this.buttonPost.Size = new System.Drawing.Size(173, 38);
+            this.buttonPost.TabIndex = 18;
+            this.buttonPost.Text = "Post to Jitbit";
+            this.buttonPost.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(503, 362);
+            this.Controls.Add(this.buttonPost);
+            this.Controls.Add(this.textBoxTicket);
+            this.Controls.Add(this.labelTicket);
+            this.Controls.Add(this.comboBoxType);
+            this.Controls.Add(this.labelType);
+            this.Controls.Add(this.labelUsername);
+            this.Controls.Add(this.labelLocation);
+            this.Controls.Add(this.labelName);
+            this.Controls.Add(this.labelSN);
+            this.Controls.Add(this.labelManufacturer);
+            this.Controls.Add(this.labelModel);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
@@ -69,6 +245,22 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelModel;
+        private System.Windows.Forms.Label labelManufacturer;
+        private System.Windows.Forms.Label labelSN;
+        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.Label labelLocation;
+        private System.Windows.Forms.Label labelUsername;
+        private System.Windows.Forms.Label labelType;
+        private System.Windows.Forms.ComboBox comboBoxType;
+        private System.Windows.Forms.Label labelTicket;
+        private System.Windows.Forms.TextBox textBoxTicket;
+        private System.Windows.Forms.Button buttonPost;
     }
 }
 

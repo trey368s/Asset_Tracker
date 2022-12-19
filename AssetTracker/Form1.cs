@@ -32,41 +32,83 @@ namespace AssetTracker
                 foreach (ManagementObject queryObj in searcherUsername.Get())
                 {
                     var domainName = queryObj["UserName"].ToString();
-                    var userName = domainName.Substring(domainName.LastIndexOf(@"\") + 1); 
+                    var userName = domainName.Substring(domainName.LastIndexOf(@"\") + 1);
+                    labelUsername.Text = userName;  
                 }
+
                 ManagementObjectSearcher searcherModel =
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_ComputerSystem");
-
                 foreach (ManagementObject queryObj in searcherModel.Get())
                 {
                     var model = queryObj["Model"].ToString();
+                    labelModel.Text = model;    
                 }
+
                 ManagementObjectSearcher searcherSN =
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_BIOS");
-
                 foreach (ManagementObject queryObj in searcherSN.Get())
                 {
                     var serialNumber = queryObj["SerialNumber"].ToString();
+                    labelSN.Text = serialNumber;
                 }
+
+                ManagementObjectSearcher searcherManufacturer =
+                    new ManagementObjectSearcher("root\\CIMV2",
+                    "SELECT * FROM Win32_ComputerSystem");
+                foreach (ManagementObject queryObj in searcherManufacturer.Get())
+                {
+                    var manufacturer = queryObj["Manufacturer"].ToString();
+                    labelManufacturer.Text = manufacturer;
+                }
+
                 ManagementObjectSearcher searcherName =
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_ComputerSystem");
-
                 foreach (ManagementObject queryObj in searcherName.Get())
                 {
                     var computerName = queryObj["Name"].ToString();
+                    string location = computerName.Substring(0, 3);
+                    labelName.Text = computerName;
+                    if (location == "COR")
+                    {
+                        labelLocation.Text = "Corporate";
+                    }
+                    if (location == "CIN")
+                    {
+                        labelLocation.Text = "Cincinnati";
+                    }
+                    if (location == "IRV")
+                    {
+                        labelLocation.Text = "Irving";
+                    }
+                    if (location == "KAL")
+                    {
+                        labelLocation.Text = "Kalamazoo";
+                    }
+                    if (location == "MAN")
+                    {
+                        labelLocation.Text = "Mankato";
+                    }
+                    if (location == "RED")
+                    {
+                        labelLocation.Text = "Redmond";
+                    }
+                    if (location == "SLC")
+                    {
+                        labelLocation.Text = "Salt Lake City";
+                    }
+                    if (location == "HMF")
+                    {
+                        labelLocation.Text = "HMF Express";
+                    }
                 }
-                ManagementObjectSearcher searcherMan =
-                    new ManagementObjectSearcher("root\\CIMV2",
-                    "SELECT * FROM Win32_ComputerSystem");
-
-                foreach (ManagementObject queryObj in searcherMan.Get())
-                {
-                    var manufacturer = queryObj["Manufacturer"].ToString();
-                }
-
+                labelType.Enabled=true;
+                comboBoxType.Enabled=true;  
+                labelTicket.Enabled=true;
+                textBoxTicket.Enabled=true;
+                buttonPost.Enabled=true;
             }
             catch (ManagementException )
             {
