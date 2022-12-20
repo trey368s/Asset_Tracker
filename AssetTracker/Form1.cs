@@ -30,7 +30,7 @@ namespace AssetTracker
         private void button1_Click(object sender, EventArgs e)
         {
             try{
-                ManagementObjectSearcher searcherUsername =
+                ManagementObjectSearcher searcherUsername = //Get computer username
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_ComputerSystem");
                 foreach (ManagementObject queryObj in searcherUsername.Get()){
@@ -39,7 +39,7 @@ namespace AssetTracker
                     labelUsername.Text = userName;
                 }
 
-                ManagementObjectSearcher searcherModel =
+                ManagementObjectSearcher searcherModel = //Get computer model
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_ComputerSystem");
                 foreach (ManagementObject queryObj in searcherModel.Get()){
@@ -47,7 +47,7 @@ namespace AssetTracker
                     labelModel.Text = model;
                 }
 
-                ManagementObjectSearcher searcherSN =
+                ManagementObjectSearcher searcherSN = //Get computer SN
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_BIOS");
                 foreach (ManagementObject queryObj in searcherSN.Get()){
@@ -55,7 +55,7 @@ namespace AssetTracker
                     labelSN.Text = serialNumber;
                 }
 
-                ManagementObjectSearcher searcherManufacturer =
+                ManagementObjectSearcher searcherManufacturer = //Get computer manufacturer
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_ComputerSystem");
                 foreach (ManagementObject queryObj in searcherManufacturer.Get()){
@@ -63,12 +63,12 @@ namespace AssetTracker
                     labelManufacturer.Text = manufacturer;
                 }
 
-                ManagementObjectSearcher searcherName =
+                ManagementObjectSearcher searcherName = //Get computer name
                     new ManagementObjectSearcher("root\\CIMV2",
                     "SELECT * FROM Win32_ComputerSystem");
                 foreach (ManagementObject queryObj in searcherName.Get()){
                     var computerName = queryObj["Name"].ToString();
-                    string location = computerName.Substring(0, 3);
+                    string location = computerName.Substring(0, 3); //Derive location from computer name
                     labelName.Text = computerName;
                     if (location == "COR"){
                         labelLocation.Text = "Corporate";
@@ -95,7 +95,7 @@ namespace AssetTracker
                         labelLocation.Text = "HMF Express";
                     }
                 }
-                labelType.Enabled = true;
+                labelType.Enabled = true; //Enable side input
                 comboBoxType.Enabled = true;
                 labelTicket.Enabled = true;
                 textBoxTicket.Enabled = true;
@@ -110,13 +110,13 @@ namespace AssetTracker
 
         private void buttonPost_Click(object sender, EventArgs e)
         {
-            if (textBoxPin.Text == "3667"){
-                if (comboBoxType.Text != "" && textBoxTicket.Text != ""){
-                    var createClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/Asset") { 
-                        Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+            if (textBoxPin.Text == "3667"){ //Password protect posting to Jitbit
+                if (comboBoxType.Text != "" && textBoxTicket.Text != ""){ //If side input is not empty
+                    var createClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/Asset") {  
+                        Authenticator = new HttpBasicAuthenticator("", "") //Create create asset client
                     };
                     var createRequest = new RestRequest(Method.POST);
-                    createRequest.AddParameter("modelName", labelModel.Text);
+                    createRequest.AddParameter("modelName", labelModel.Text); //Add params from Windows Form
                     createRequest.AddParameter("manufacturer", labelManufacturer.Text);
                     createRequest.AddParameter("type", comboBoxType.Text);
                     createRequest.AddParameter("supplier", "Purchased");
@@ -124,25 +124,25 @@ namespace AssetTracker
                     createRequest.AddParameter("location", labelLocation.Text);
                     createRequest.AddParameter("comments", labelName.Text);
                     createRequest.AddParameter("company", "Senneca");
-                    IRestResponse createResponse = createClient.Execute(createRequest);
+                    IRestResponse createResponse = createClient.Execute(createRequest); //Execute create asset client
                     var createResp = createResponse.Content;
                     var createJson = Newtonsoft.Json.Linq.JObject.Parse(createResp);
-                    var id = (int)createJson["id"];
+                    var id = (int)createJson["id"]; //Take asset ID
 
                     var ticketClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/AddAssetToTicket"){
-                        Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+                        Authenticator = new HttpBasicAuthenticator("", "") //Create add asset to ticket client 
                     };
                     var ticketRequest = new RestRequest(Method.POST);
                     ticketRequest.AddParameter("assetId", id);
                     ticketRequest.AddParameter("ticketId", textBoxTicket.Text);
-                    IRestResponse ticketResponse = ticketClient.Execute(ticketRequest);
+                    IRestResponse ticketResponse = ticketClient.Execute(ticketRequest); //Execute add asset to ticket client 
 
                     var userClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/UserByEmail"){
-                        Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+                        Authenticator = new HttpBasicAuthenticator("", "") //Create user lookup client 
                     };
                     var userRequest = new RestRequest(Method.GET);
                     var email = "";
-                    if (labelLocation.Text == "Salt Lake City"){
+                    if (labelLocation.Text == "Salt Lake City"){ //Determine email domain by location
                         email = labelUsername.Text + "@subzeroeng.com";
                     }
                     if (labelLocation.Text == "Mankato"){
@@ -154,34 +154,34 @@ namespace AssetTracker
                     userRequest.AddParameter("email", email);
                     var userId = "";
                     try{
-                        IRestResponse userResponse = userClient.Execute(userRequest);
+                        IRestResponse userResponse = userClient.Execute(userRequest); //Execute user lookup client 
                         var userResp = userResponse.Content;
                         var userJson = Newtonsoft.Json.Linq.JObject.Parse(userResp);
-                        userId = (string)userJson["UserID"];
+                        userId = (string)userJson["UserID"]; //Take user ID
                     }
                     catch{
-                        userId = "";
-                        MessageBox.Show("Unable to find Jitbit user.");
+                        userId = ""; //Return empty if unable to find user
+                        MessageBox.Show("Unable to find Jitbit user."); 
                     }
 
                     var assignClient = new RestClient("https://shsupport.jitbit.com/helpdesk/api/AssignAssetToUser"){
-                        Authenticator = new HttpBasicAuthenticator("tstegeman@senneca.com", "Password1")
+                        Authenticator = new HttpBasicAuthenticator("", "") //Create user assignment client
                     };
                     var assignRequest = new RestRequest(Method.POST);
-                    assignRequest.AddParameter("assetId", id);
+                    assignRequest.AddParameter("assetId", id); 
                     assignRequest.AddParameter("userId", userId);
-                    IRestResponse assignResponse = assignClient.Execute(assignRequest);
+                    IRestResponse assignResponse = assignClient.Execute(assignRequest); //Execute user assignment client
                     var assignResp = assignResponse.Content;
                     DialogResult dialog = MessageBox.Show("Asset created with ID " + id);
                     if (dialog == DialogResult.OK){
                         Application.Exit();
                     }
                 }
-                else{
+                else{ 
                     MessageBox.Show("Please enter type and ticket number.");
                 }
             }
-            else{
+            else{ 
                 MessageBox.Show("Incorrect PIN, for admin use only.");
             }
         }
